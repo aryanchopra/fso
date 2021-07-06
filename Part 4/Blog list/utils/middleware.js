@@ -4,6 +4,9 @@ morgan.token("data", (req, res) => {
   if (req.method == "POST") {
     return [req.body.title, req.body.author];
   }
+  if (req.method == "PUT") {
+    return [req.body.title, req.body.author];
+  }
 });
 
 const morganmiddleware = morgan(

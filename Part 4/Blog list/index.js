@@ -1,14 +1,8 @@
-const express = require("express");
-const cors = require("cors");
+const app = require("./app");
 const config = require("./utils/config");
-const { morganmiddleware } = require("./utils/middleware");
-const blogRouter = require("./controllers/blog");
+const http = require("http");
 
-const app = express();
-app.use(cors());
-app.use(express.json());
-app.use(morganmiddleware);
-app.use("/api/blogs", blogRouter);
-app.listen(config.PORT, () => {
+const server = http.createServer(app);
+server.listen(config.PORT, () => {
   console.log(`Server running on port ${config.PORT}`);
 });

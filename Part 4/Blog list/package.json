@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
-    "test": "jest --verbose"
+    "test": "cross-env NODE_ENV=test jest --verbose --runInBand"
   },
   "author": "aryan",
   "license": "ISC",
@@ -13,12 +13,15 @@
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
+    "express-async-errors": "^3.1.1",
     "mongoose": "^5.13.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.9"
   },
   "devDependencies": {
-    "jest": "^27.0.6"
+    "cross-env": "^7.0.3",
+    "jest": "^27.0.6",
+    "supertest": "^6.1.3"
   },
   "jest": {
     "testEnvironment": "node"

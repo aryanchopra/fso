@@ -8,6 +8,10 @@ const totallikes = (blogs) => {
 };
 
 const favblog = (blogs) => {
+  if (blogs.length === 0) {
+    return {};
+  }
+
   const reducer = (prev, curr) => {
     console.log("acc: ", prev, " curr: ", curr);
     return prev.likes > curr.likes ? prev : curr;
