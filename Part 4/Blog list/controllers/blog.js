@@ -12,34 +12,37 @@ blogRouter.post("/", async (request, response) => {
   if (!request.body.title || !request.body.author) {
     return response.status(400).end();
   }
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
 
-  if (!request.token || !decodedToken.id) {
+  if (!request.user) {
     return response.status(401).json({ err: "token invalid" });
   }
-  const user1 = await User.findById(decodedToken.id);
+  const user1 = request.user;
+
   request.body.user = user1.id;
+
   const blog = new Blog(request.body);
+
   const blogpromise = await blog.save();
+
   user1.blogs = user1.blogs.concat(blogpromise._id);
+
   await user1.save();
+
   return response.status(201).json(blogpromise);
 });
 blogRouter.delete("/:id", async (request, response, next) => {
-  const decodedToken = jwt.verify(request.token, process.env.SECRET);
-
-  if (!request.token || !decodedToken.id) {
+  console.log(request.user);
+  if (!request.user) {
     return response.status(401).json({ err: "token invalid" });
   }
-  const userId = await User.findById(decodedToken.id);
   const id = request.params.id;
   const blogobj = await Blog.findById(id);
-  console.log(typeof blogobj.user);
-  console.log(userId);
-  if (blogobj.user.toString() === userId.id.toString()) {
-    Blog.findByIdAndRemove(id)
-      .then((result) => response.status(204).end())
-      .catch((err) => next(err));
+  if (!blogobj) {
+    response.status(404).end();
+  }
+  if (blogobj.user.toString() === request.user.id) {
+    const result = await Blog.findByIdAndRemove(id);
+    response.status(204).end();
   } else {
     response.status(403).json({
       error: "Blog does not belong to user",
