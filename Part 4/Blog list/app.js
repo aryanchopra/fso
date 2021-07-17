@@ -14,7 +14,7 @@ app.use(cors());
 app.use(express.json());
 app.use(morganmiddleware);
 app.use(tokenExtractor);
-app.use("/api/blogs", userExtractor, blogRouter);
+app.use("/api/blogs", blogRouter);
 app.use("/api/users", usersRouter);
 app.use("/api/login", loginRouter);
 app.use(errorHandler);

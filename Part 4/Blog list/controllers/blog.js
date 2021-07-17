@@ -2,13 +2,14 @@ const blogRouter = require("express").Router();
 const Blog = require("../models/blog");
 const User = require("../models/user");
 const jwt = require("jsonwebtoken");
+const { userExtractor } = require("../utils/middleware");
 require("express-async-errors");
 blogRouter.get("/", async (request, response) => {
   const blogs = await Blog.find({});
   response.json(blogs);
 });
 
-blogRouter.post("/", async (request, response) => {
+blogRouter.post("/", userExtractor, async (request, response) => {
   if (!request.body.title || !request.body.author) {
     return response.status(400).end();
   }
@@ -30,7 +31,7 @@ blogRouter.post("/", async (request, response) => {
 
   return response.status(201).json(blogpromise);
 });
-blogRouter.delete("/:id", async (request, response, next) => {
+blogRouter.delete("/:id", userExtractor, async (request, response, next) => {
   console.log(request.user);
   if (!request.user) {
     return response.status(401).json({ err: "token invalid" });
@@ -50,9 +51,9 @@ blogRouter.delete("/:id", async (request, response, next) => {
   }
 });
 
-blogRouter.put("/:id", async (request, response, next) => {
+blogRouter.put("/:id", userExtractor, async (request, response, next) => {
   const body = request.body;
-  console.log(body.likes);
+  console.log("printing received body", body);
   const updatedblog = {
     title: body.title,
     author: body.author,

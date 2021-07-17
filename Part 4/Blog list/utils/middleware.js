@@ -27,7 +27,7 @@ const errorHandler = (error, request, response, next) => {
     return response.status(400).json({ error: error.message });
   } else if (error.name === "JsonWebTokenError") {
     return response.status(401).json({
-      error: "invalid token",
+      error: "invalid token1",
     });
   }
 
@@ -35,8 +35,9 @@ const errorHandler = (error, request, response, next) => {
 };
 const tokenExtractor = (request, response, next) => {
   const authorization = request.get("Authorization");
-  console.log(authorization);
+  console.log("printign request: authorization", authorization);
   if (authorization && authorization.startsWith("bearer ")) {
+    console.log("setting request token");
     request.token = authorization.substring(7);
   } else {
     request.token = null;
@@ -48,6 +49,7 @@ const userExtractor = async (request, response, next) => {
   const decodedToken = jwt.verify(request.token, process.env.SECRET);
   const user = await User.findById(decodedToken.id);
   if (user) {
+    console.log("setting request user");
     request.user = user;
   } else {
     request.user = null;
