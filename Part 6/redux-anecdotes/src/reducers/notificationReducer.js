@@ -1,11 +1,14 @@
+let prevtimer = null;
+
 export const newNotification = (message, timer) => {
   return async (dispatch) => {
     dispatch({ type: "NEW_NOTIFICATION", message });
-    setTimeout(() => {
+    const timeoutID = setTimeout(() => {
       dispatch({
         type: "REMOVE_NOTIFICATION",
       });
     }, timer);
+    prevtimer = timeoutID;
   };
 };
 
@@ -18,6 +21,7 @@ export const newNotification = (message, timer) => {
 const notificationReducer = (state = "Sample notification", action) => {
   switch (action.type) {
     case "NEW_NOTIFICATION":
+      if (prevtimer) clearTimeout(prevtimer);
       return action.message;
 
     case "REMOVE_NOTIFICATION":
