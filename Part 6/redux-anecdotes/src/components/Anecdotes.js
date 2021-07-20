@@ -12,8 +12,8 @@ const Anecdotes = () => {
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map((anecdote) => (
-        <Anecdote anecdote={anecdote} />
+      {anecdotes.map((anecdote, idx) => (
+        <Anecdote key={idx} anecdote={anecdote} />
       ))}
     </div>
   );
