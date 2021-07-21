@@ -64,7 +64,7 @@ app.post("/api/persons", (request, response) => {
   console.log(typeof Number(body.phone));
   if (!body.name || !body.phone) {
     return response.status(400).json({
-      error: "content missing 1",
+      error: "content missing 21",
     });
   }
 
